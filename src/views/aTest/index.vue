@@ -230,6 +230,9 @@ export default {
     this.getList()
   },
   methods: {
+    testMethod() {
+      return 'testMethod called'
+    },
     getList() {
       this.listLoading = true
       fetchList(this.listQuery).then(response => {
