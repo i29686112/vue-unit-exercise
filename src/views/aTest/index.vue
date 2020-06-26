@@ -150,6 +150,7 @@
 import { fetchList, fetchPv, createArticle, updateArticle } from '@/api/article'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
+import { copyWord, copyWordWithCB } from '@/utils/string'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
 const calendarTypeOptions = [
@@ -230,6 +231,8 @@ export default {
     this.getList()
   },
   methods: {
+    copyWordWithCB: copyWordWithCB,
+    copyWord: copyWord,
     testMethod() {
       return 'testMethod called'
     },

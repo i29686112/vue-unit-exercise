@@ -1,6 +1,11 @@
 import { createLocalVue, mount } from '@vue/test-utils'
 import table from '@/views/aTest'
+var sinon = require('sinon')
 
+// https://medium.com/@envive.tw/%E5%BE%9E%E7%AF%84%E4%BE%8B%E5%AD%B8%E7%BF%92-vue-js-%E7%9A%84-unit-test-44e6f9f1b903
+// good example document
+
+// example for stub/mock/spy https://cythilya.github.io/2017/09/17/unit-test-with-mocha-chai-and-sinon/
 describe('aTest/index.vue', () => {
   it('have data', () => {
     // sometime we need it
@@ -8,7 +13,8 @@ describe('aTest/index.vue', () => {
 
     const wrapper = mount(table, {
 
-      stubs: ['loading', 'el-rate', 'el-dialog', 'el-form', 'el-form-item', 'el-date-picker', 'el-input', 'el-select', 'el-option', 'el-button', 'el-table', 'el-checkbox', 'el-table-column', 'el-pagination']
+      stubs: ['loading', 'el-rate', 'el-dialog', 'el-form', 'el-form-item', 'el-date-picker', 'el-input', 'el-select', 'el-option', 'el-button', 'el-table', 'el-checkbox', 'el-table-column', 'el-pagination'],
+      mocks: { copyWord: function(target, times) { return 'abcde' } }
 
     })
     wrapper.setData({ list: testData })
@@ -23,10 +29,26 @@ describe('aTest/index.vue', () => {
     // * Anyway
     // wrapper.vm === this
 
-    expect(wrapper.vm.list.length).toBe(20)
+    // replace a function with stub
+    sinon.stub(wrapper.vm, 'copyWord').callsFake(function(string, times) {
+      return string.repeat(times * 2)
+    })
 
-    const test = wrapper.vm.created()
-    const emittedObj = wrapper.emitted()
+    // check stub is working
+    expect(wrapper.vm.copyWord('1', 5)).toBe(('11111').repeat(2))
+
+    wrapper.vm.copyWord.restore()
+    // remove stub
+    expect(wrapper.vm.copyWord('1', 5)).toBe(('11111'))
+
+    // yield test , todo
+    const testYield = sinon.stub(wrapper.vm, 'copyWord')
+    testYield.yields('1', 5)
+
+    var callback = sinon.spy()
+    wrapper.vm.copyWordWithCB('1', 5, callback)
+
+    expect(callback.args).toBe(1)
   })
 
   /*  it('toggle click', () => {
