@@ -1,4 +1,11 @@
 import { validUsername, validURL, validLowerCase, validUpperCase, validAlphabets } from '@/utils/validate.js'
+import { copyWord } from '@/utils/string'
+describe('Utils:string', () => {
+  it('validCopyWord', () => {
+    expect(copyWord('admin', 5)).toBe('adminadminadminadminadmin')
+  })
+})
+
 describe('Utils:validate', () => {
   it('validUsername', () => {
     expect(validUsername('admin')).toBe(true)
